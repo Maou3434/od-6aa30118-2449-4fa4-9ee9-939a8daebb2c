@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: od-6aa30118-2449-4fa4-9ee9-939a8daebb2c
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: "."
