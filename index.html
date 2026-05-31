@@ -1,0 +1,269 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Minimal Focus Prototype</title>
+  <style>
+    :root {
+      /* Brand Tokens derived from mptpeeds-image.png */
+      --bg:      oklch(14% 0.005 285);
+      --surface: oklch(18% 0.006 285);
+      --fg:      oklch(98% 0.002 285);
+      --muted:   oklch(60% 0.008 285);
+      --border:  oklch(25% 0.01 285);
+      --accent:  oklch(70% 0.15 250);
+
+      --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
+      --font-body:    -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+      --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+
+      --radius: 12px;
+      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 640px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+    }
+
+    p.subtitle {
+      color: var(--muted);
+      font-size: 1.1rem;
+      font-weight: 400;
+    }
+
+    .search-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      padding: 1.25rem 1.5rem;
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 1.1rem;
+      outline: none;
+      transition: var(--transition);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px color-mix(in oklch, var(--accent), transparent 85%);
+    }
+
+    input::placeholder {
+      color: var(--muted);
+      opacity: 0.4;
+    }
+
+    .actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    button {
+      background: var(--fg);
+      color: var(--bg);
+      border: none;
+      padding: 0.85rem 1.75rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    button:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    button.secondary {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    button.secondary:hover {
+      background: var(--surface);
+      color: var(--fg);
+      border-color: var(--muted);
+    }
+
+    /* Tweaks Panel */
+    .tweaks {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: color-mix(in oklch, var(--surface), transparent 5%);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 240px;
+      z-index: 100;
+    }
+
+    .tweaks h2 {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .tweak-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--fg);
+    }
+
+    .tweak-row input[type="color"] {
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      border: none;
+      border-radius: 6px;
+      background: none;
+      cursor: pointer;
+    }
+
+    .tweak-row input[type="range"] {
+      width: 100px;
+      accent-color: var(--accent);
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      body { padding: 1.5rem; justify-content: flex-start; padding-top: 25vh; }
+      .tweaks { bottom: 1rem; right: 1rem; width: calc(100% - 2rem); }
+      .container { gap: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Minimal Focus</h1>
+      <p class="subtitle">A simple, distraction-free interface for your thoughts.</p>
+    </header>
+
+    <div class="search-wrapper">
+      <input type="text" placeholder="What's on your mind?" autofocus>
+    </div>
+
+    <div class="actions">
+      <button>Continue</button>
+      <button class="secondary">View Archives</button>
+    </div>
+  </div>
+
+  <div class="tweaks" id="tweaks-panel">
+    <h2>Design Tweaks</h2>
+    <div class="tweak-row">
+      <label>Accent Color</label>
+      <input type="color" id="tweak-accent" value="#4ba3ff">
+    </div>
+    <div class="tweak-row">
+      <label>Corner Radius</label>
+      <input type="range" id="tweak-radius" min="0" max="32" value="12">
+    </div>
+    <div class="tweak-row">
+      <label>Surface Glass</label>
+      <input type="range" id="tweak-opacity" min="0" max="100" value="100">
+    </div>
+  </div>
+
+  <script>
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "accent": "#4ba3ff",
+      "radius": 12,
+      "opacity": 100
+    }/*EDITMODE-END*/;
+
+    const accentInput = document.getElementById('tweak-accent');
+    const radiusInput = document.getElementById('tweak-radius');
+    const opacityInput = document.getElementById('tweak-opacity');
+    const root = document.documentElement;
+
+    accentInput.addEventListener('input', (e) => {
+      root.style.setProperty('--accent', e.target.value);
+    });
+
+    radiusInput.addEventListener('input', (e) => {
+      root.style.setProperty('--radius', e.target.value + 'px');
+    });
+
+    opacityInput.addEventListener('input', (e) => {
+      const surface = e.target.value / 100;
+      root.style.setProperty('--surface', `oklch(18% 0.006 285 / ${surface})`);
+    });
+
+    // Handle interactive search behavior
+    const mainInput = document.querySelector('input[type="text"]');
+    mainInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.target.value.trim() !== '') {
+        const val = e.target.value;
+        e.target.value = '';
+        console.log('Action triggered:', val);
+        // Optional: Add a subtle feedback animation here
+      }
+    });
+  </script>
+
+</body>
+</html>
